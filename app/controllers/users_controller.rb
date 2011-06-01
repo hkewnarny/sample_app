@@ -12,10 +12,13 @@ class UsersController < ApplicationController
   def create
   	@user = User.new(params[:user])
   	if @user.save
+      sign_in @user
   		flash[:success] = "Welcome!"
-  		redirect_to @user #cal also use redirect_to user_path i believe
+  		redirect_to @user #can also use redirect_to user_path i believe
   	else
   		@title = "Sign up"
+  		@user.password = ""
+  		@user.password_confirmation = ""
   		render 'new'
   	end
   end
