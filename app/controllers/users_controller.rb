@@ -1,5 +1,6 @@
 class UsersController < ApplicationController
   def new
+  	@user = User.new
   	@title = "Sign up"
   end
 
@@ -8,4 +9,14 @@ class UsersController < ApplicationController
   	@title = @user.name
   end
 
+  def create
+  	@user = User.new(params[:user])
+  	if @user.save
+  		flash[:success] = "Welcome!"
+  		redirect_to @user #cal also use redirect_to user_path i believe
+  	else
+  		@title = "Sign up"
+  		render 'new'
+  	end
+  end
 end
