@@ -3,7 +3,11 @@
 <%= form_for(:session, :url => sessions_path) do |f| %>
   <div class="field">
     <%= f.label :email %><br />
-    <%= f.text_field :email %>
+    <% if params[:session].nil? %>
+      <%= f.text_field :email , :value => "Email" %>
+    <% else %>
+      <%= f.text_field :email , :value => params[:session][:email] %>   <!-- Added lines 6-10 myself, does it work properly?-->
+    <%end%>
   </div>
   <div class="field">
     <%= f.label :password %><br />
