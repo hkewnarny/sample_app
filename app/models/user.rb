@@ -51,6 +51,11 @@ def self.authenticate_with_salt(id, cookie_salt)
   return user if user.salt == cookie_salt
 end
 =end
+
+  def feed
+    Micropost.where("user_id = ?", id)
+  end
+
  	private
 
   	  def encrypt_password

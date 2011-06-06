@@ -132,6 +132,26 @@ describe User do
     
   end
 
+  describe "admin attribute" do
+
+    before(:each) do
+      @user = User.create!(@attr)
+    end
+
+    it "should respond to admin" do
+      @user.should respond_to(:admin)
+    end
+
+    it "should not be an admin by default" do
+      @user.should_not be_admin
+    end
+
+    it "should be convertible to an admin" do
+      @user.toggle!(:admin)
+      @user.should be_admin
+    end
+  end
+  
   describe "micropost associations" do
 
     before(:each) do
@@ -154,5 +174,23 @@ describe User do
         Micropost.find_by_id(micropost.id).should be_nil
       end
     end 
+
+    describe "status feed" do
+
+      it "should have a feed" do
+        @user.should respond_to(:feed)
+      end
+
+      it "should include the user's microposts" do
+        @user.feed.include?(@mp1).should be_true
+        @user.feed.include?(@mp2).should be_true
+      end
+
+      it "should not include a different user's microposts" do
+        mp3 = Factory(:micropost,
+                      :user => Factory(:user, :email => Factory.next(:email)))
+        @user.feed.include?(mp3).should be_false
+      end
+    end
   end
 end
