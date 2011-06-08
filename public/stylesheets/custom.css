@@ -140,6 +140,7 @@ td.sidebar {
 div.field, div.actions {
   margin-bottom: 10px;
 }
+
 /* For error explanations*/
 .field_with_errors {
   margin-top: 10px;
