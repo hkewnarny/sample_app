@@ -19,6 +19,10 @@ class User < ActiveRecord::Base
   has_many :relationships, :foreign_key => "follower_id",
                            :dependent => :destroy
   has_many :following, :through => :relationships, :source => :followed
+  has_many :reverse_relationships, :foreign_key => "followed_id",
+                                   :class_name => "Relationship", #without this line, Rails will look for ReverseRelationship class
+                                   :dependent => :destroy
+  has_many :followers, :through => :reverse_relationships, :source => :follower
 
 	email_regex = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
@@ -57,13 +61,18 @@ def self.authenticate_with_salt(id, cookie_salt)
 end
 =end
 
-  def following(followed)
+  def following?(followed)
     relationships.find_by_followed_id(followed)
   end
 
   def follow!(followed)
     relationships.create!(:followed_id => followed.id)
   end
+
+  def unfollow!(followed)
+    relationships.find_by_followed_id(followed).destroy
+  end
+
   def feed
     Micropost.where("user_id = ?", id)
   end
@@ -72,7 +81,7 @@ end
 
   	  def encrypt_password
   	  	self.salt = make_salt if new_record?
-   	 	self.encrypted_password = encrypt(password)
+   	  	self.encrypted_password = encrypt(password)
    	  end
 
    	  def encrypt(string)
