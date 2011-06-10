@@ -74,7 +74,7 @@ end
   end
 
   def feed
-    Micropost.from_users_folowed_by(self)
+    Micropost.from_users_followed_by(self)
   end
 
  	private

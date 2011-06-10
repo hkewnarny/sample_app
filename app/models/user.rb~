@@ -74,7 +74,7 @@ end
   end
 
   def feed
-    Micropost.where("user_id = ?", id)
+    Micropost.from_users_folowed_by(self)
   end
 
  	private
